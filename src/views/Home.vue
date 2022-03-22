@@ -99,6 +99,12 @@ export default {
     //FOR DATE OF BIRTH
     const dateOfBirth=useField('dateOfBirth',function(value){
       if(!value) return 'This field is required'
+      //validation for leap
+      if(value % 400 ===0 && year % 4===0){
+        return true
+      }else{
+        return false
+      }
     })
     //FOR BIO
     const bio =useField('bio',function(value){
