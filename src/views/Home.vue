@@ -1,42 +1,49 @@
 <template>
   <div class="home">
-    {{UserInfo}}
     <div class="w-full bg-gray-800 h-screen">
     <div class="bg-gradient-to-b from-blue-800 to-blue-600 h-96"></div>
     <div class="max-w-5xl mx-auto px-6 sm:px-6 lg:px-8 mb-12">
         <div class="bg-gray-900 w-full shadow rounded p-8 sm:p-12 -mt-72">
-            <p class="text-3xl font-bold leading-7 text-center text-white">Contact me</p>
-            <form action="" method="post">
+            <p class="text-3xl font-bold leading-7 text-center text-white">User Info</p>
+            <form @submit.prevent="formSubmit" method="post">
                 <div class="md:flex items-center mt-12">
                     <div class="w-full md:w-1/2 flex flex-col">
-                      <BaseInput v-model="UserInfo.name"
+                      <BaseInput v-model="name"
                         label="Name"
-                        type="text"/>
+                        type="text"
+                        :error="nameError"/>
                     </div>
                     <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4">
-                      <BaseInput v-model="UserInfo.email"
+                      <BaseInput v-model="email"
                         label="Email"
-                        type="email"/>
+                        type="email"
+                        :error="emailError"/>
                     </div>
                 </div>
                   <BaseDateOfBirth 
-                    v-model="UserInfo.dateOfBirth"
+                    v-model="dateOfBirth"
                     label="Date Of Birth"
-                    type="text"/>
+                    type="text"
+                    :error="dateOfBirthError"
+                    />
+
                     <BaseTextArea 
-                      v-model="UserInfo.bio"
+                      v-model="bio"
                       label="Bio"
-                      type="text"/>
-                  <BasePhoto
-                  v-model="UserInfo.photo"
+                      type="text"
+                      :error="bioError"
+                      :maxChar="maxChar"
+                      />
+
+                    <BasePhoto
+                      v-model="photo"
                       label="Photo"
-                      type="file"/>
+                      type="file"
+                      :error="photoError"
+                      />
                     
-                <div class="flex items-center justify-center w-full">
-                    <button class="mt-9 font-semibold leading-none text-white py-4 px-10 bg-blue-700 rounded hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 focus:outline-none">
-                        Send message
-                    </button>
-                </div>
+                    <SubmitButton />
+
             </form>
         </div>
     </div>
@@ -49,7 +56,9 @@ import BaseInput from '../components/BaseInput.vue'
 import BaseTextArea from '../components/BaseTextArea.vue'
 import BasePhoto from '../components/BasePhoto.vue'
 import BaseDateOfBirth from '../components/BaseDateOfBirth.vue'
+import SubmitButton from '../components/SubmitButton.vue'
 
+import { useField } from 'vee-validate'
 export default {
   name: "Home",
 
@@ -57,19 +66,76 @@ export default {
     BaseInput,
     BaseTextArea,
     BasePhoto,
-    BaseDateOfBirth
+    BaseDateOfBirth,
+    SubmitButton
   },
-
   data(){
     return{
-      UserInfo:{
-        name:"",
-        email:"",
-        dateOfBirth:"",
-        bio:"",
-        photo:null
-      }
+      maxChar:5000,
     }
-  }
+  },
+  setup(){
+    //FOR NAME
+    const name =useField('name',function(value){
+       if(!value) return 'This field is required'
+       const nameRegex = /^[a-zA-Z\s]*$/;
+       if(!nameRegex.test(value)){
+         return "only alphabet, dot and space is allowed"
+       }
+       return true
+    })
+    //FOR EMAIL
+    const email =useField('email',function(value){
+      if(!value) return 'This field is required'
+
+      const emailRegex = RegExp(
+        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+      if(!emailRegex.test(String(value).toLowerCase())){
+        return 'Please Enter a valid email address'
+      }
+      return true
+        })
+    
+    //FOR DATE OF BIRTH
+    const dateOfBirth=useField('dateOfBirth',function(value){
+      if(!value) return 'This field is required'
+    })
+    //FOR BIO
+    const bio =useField('bio',function(value){
+       if(!value){
+         return 'This field is required'
+       } 
+       else{
+         return true
+       }
+    })
+    //FOR photo
+    const photo =useField('photo',function(value){
+       if(!value){
+         return 'This field is required'
+       } 
+       else{
+         return true
+       }
+    })
+    function formSubmit(){
+      alert('Submitted')
+    }
+        return {
+          formSubmit,
+          name:name.value,
+          email:email.value,
+          emailError:email.errorMessage,
+          nameError:name.errorMessage,
+          dateOfBirth:dateOfBirth.value,
+          dateOfBirthError:dateOfBirth.errorMessage,
+          bio:bio.value,
+          bioError:bio.errorMessage,
+          photo:photo.value,
+          photoError:photo.errorMessage,
+          
+        }
+  },
+
   }
 </script>
