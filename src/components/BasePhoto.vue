@@ -21,13 +21,15 @@
         <p class="text-red-900">{{error}}</p>
     </div>
 </div>
+
+<div v-if="preview" class="preview">
+    <img class="object-cover h-48 w-96" :src="preview">
+    <p class="text-gray-300">Size:{{image.size/1024}}KB</p>
+</div>
 <div class="relative">
     <div class="absolute top-1 left-0">
         <p v-if="imageError" class="text-red-900"> {{imageError}}</p>
     </div>
-</div>
-<div class="preview">
-    <img v-if="preview" class="object-cover h-48 w-96" :src="preview">
 </div>
 </template>
 
@@ -89,6 +91,17 @@ export default {
             this.imageError = `The image width (${this.image.width}) is too much (max is ${MAX_WIDTH}).`;
             return;
           }
+          else{
+            //preview image
+            var input = event.target;
+            if (input.files) {
+                reader.onload = (e) => {
+                this.preview = e.target.result;
+                }
+                this.image1=input.files[0];
+                reader.readAsDataURL(input.files[0]);
+            }
+          }
           //MAX_HEIGHT
           if(this.image.height > MAX_HEIGHT) {
             this.imageError = `The image height (${this.image.height}) is too much (max is ${MAX_HEIGHT}).`;
@@ -103,15 +116,7 @@ export default {
       reader.onerror = evt => {
         console.error(evt);
       }
-      //preview image
-      var input = event.target;
-      if (input.files) {
-        reader.onload = (e) => {
-          this.preview = e.target.result;
-        }
-        this.image1=input.files[0];
-        reader.readAsDataURL(input.files[0]);
-      }
+    
       
     },
   }
