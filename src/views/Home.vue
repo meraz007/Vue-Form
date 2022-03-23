@@ -12,7 +12,6 @@
                         label="Name"
                         type="text"
                         :error="nameError"
-                        draggable="true"
                         />
                     </div>
                     <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4">
@@ -43,9 +42,7 @@
                       type="file"
                       :error="photoError"
                       />
-                    
                     <SubmitButton />
-
             </form>
         </div>
     </div>
@@ -61,6 +58,8 @@ import BaseDateOfBirth from '../components/BaseDateOfBirth.vue'
 import SubmitButton from '../components/SubmitButton.vue'
 
 import { useField } from 'vee-validate'
+//import draggable from 'vuedraggable'
+
 export default {
   name: "Home",
 
@@ -69,11 +68,12 @@ export default {
     BaseTextArea,
     BasePhoto,
     BaseDateOfBirth,
-    SubmitButton
+    SubmitButton,
   },
   data(){
     return{
       maxChar:5000,
+      drag: false,
     }
   },
   setup(){
