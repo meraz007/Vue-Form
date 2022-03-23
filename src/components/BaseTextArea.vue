@@ -11,7 +11,11 @@
         @input="$emit('update:modelValue',$event.target.value)"
         >
         </textarea>
-        <p class="text-red-900">{{error}}</p>
+        <div class="relative">
+            <div class="absolute top-1 left-0">
+                <p class="text-red-900">{{error}}</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -35,8 +39,14 @@ export default {
     },
     computed:{
         charCount(){
-           return this.maxChar - this.modelValue.length
+           return this.modelValue.length
         }
     }
 }
 </script>
+
+<style scoped>
+    .break{
+        position: absolute;
+    }
+</style>

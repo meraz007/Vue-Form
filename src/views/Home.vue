@@ -11,7 +11,9 @@
                       <BaseInput v-model="name"
                         label="Name"
                         type="text"
-                        :error="nameError"/>
+                        :error="nameError"
+                        draggable="true"
+                        />
                     </div>
                     <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4">
                       <BaseInput v-model="email"
@@ -78,7 +80,7 @@ export default {
     //FOR NAME
     const name =useField('name',function(value){
        if(!value) return 'This field is required'
-       const nameRegex = /^[a-zA-Z\s]*$/;
+       const nameRegex = /^[a-zA-Z\s.]*$/;
        if(!nameRegex.test(value)){
          return "only alphabet, dot and space is allowed"
        }
@@ -100,7 +102,7 @@ export default {
     const dateOfBirth=useField('dateOfBirth',function(value){
       if(!value) return 'This field is required'
       //validation for leap
-      if(value % 400 ===0 && year % 4===0){
+      if(value % 400 ===0){
         return true
       }else{
         return false

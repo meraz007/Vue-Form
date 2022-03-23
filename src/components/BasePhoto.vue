@@ -16,7 +16,11 @@
             <img v-if="modelValue" class="object-cover h-48 w-96" :src="modelValue">
         </div>
     </div>
-    <p class="text-red-900">{{error}}</p>
+    <div class="relative">
+    <div class="absolute top-1 left-0">
+        <p class="text-red-900">{{error}}</p>
+    </div>
+</div>
 </template>
 
 <script>
