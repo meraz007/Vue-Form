@@ -6,7 +6,8 @@
         class="h-40 text-base leading-none 
         text-gray-50 p-3 focus:outline-none
         focus:border-blue-700 mt-4 
-        bg-gray-800 border-0 rounded focus:ring "
+        bg-gray-800 border-0 rounded focus:ring"
+        maxlength="5000"
         :value="modelValue"
         @input="$emit('update:modelValue',$event.target.value)"
         >
@@ -14,6 +15,11 @@
         <div class="relative">
             <div class="absolute top-1 left-0">
                 <p class="text-red-900">{{error}}</p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute top-1 left-0">
+                <p v-if="!limitCount" class="text-red-900">{{error}}</p>
             </div>
         </div>
     </div>
@@ -40,7 +46,7 @@ export default {
     computed:{
         charCount(){
            return this.modelValue.length
-        }
+        },
     }
 }
 </script>
