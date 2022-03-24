@@ -39,10 +39,12 @@ export default {
         error:{
             type:String
         },
-        maxChar:{
-            type:String
-        },
     },
+     data(){
+        return{
+        maxChar:5000,
+        }
+  },
     computed:{
         charCount(){
            return this.modelValue.length
@@ -50,9 +52,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .break{
-        position: absolute;
-    }
-</style>

@@ -7,42 +7,60 @@
             <p class="text-3xl font-bold leading-7 text-center text-white">User Info</p>
             <form @submit.prevent="formSubmit" method="post">
                 <div class="md:flex items-center mt-12">
-                    <div class="w-full md:w-1/2 flex flex-col">
-                      <BaseInput v-model="name"
+                  <div
+                  @drop="onDrop"
+                  @dragenter.prevent
+                  @dragover.prevent
+                  >
+                  
+                  </div>
+                    <div class="w-full md:w-1/2 flex flex-col" @dragstart="startDrag" id="123"
+                    draggable="true">
+                      <BaseInput 
+                      v-model="name"
                         label="Name"
                         type="text"
                         :error="nameError"
                         />
                     </div>
-                    <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4">
-                      <BaseInput v-model="email"
+                    <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4" @dragstart="startDrag" id="123"
+                    draggable="true">
+                      <BaseInput 
+                      v-model="email"
                         label="Email"
                         type="email"
                         :error="emailError"/>
                     </div>
                 </div>
+                <div draggable="true">
                   <BaseDateOfBirth 
                     v-model="dateOfBirth"
                     label="Date Of Birth"
                     type="text"
                     :error="dateOfBirthError"
                     />
-
-                    <BaseTextArea 
+                </div>
+                    <div draggable="true">
+                      <BaseTextArea 
                       v-model="bio"
                       label="Bio"
                       type="text"
                       :error="bioError"
                       :maxChar="maxChar"
                       />
-
-                    <BasePhoto
+                    </div>
+                    <div draggable="true">
+                      <BasePhoto
                       v-model="photo"
                       label="Photo"
                       type="file"
                       :error="photoError"
                       />
-                    <SubmitButton />
+                    </div>
+                    <div draggable="true">
+                      <SubmitButton />
+                    </div>
+                    
             </form>
         </div>
     </div>
@@ -58,8 +76,6 @@ import BaseDateOfBirth from '../components/BaseDateOfBirth.vue'
 import SubmitButton from '../components/SubmitButton.vue'
 
 import { useField } from 'vee-validate'
-//import draggable from 'vuedraggable'
-
 export default {
   name: "Home",
 
@@ -70,13 +86,36 @@ export default {
     BaseDateOfBirth,
     SubmitButton,
   },
-  data(){
-    return{
-      maxChar:5000,
-      drag: false,
-    }
-  },
+
   setup(){
+    
+    const startDrag =(event)=>{
+      event.dataTransfer.dropEffect ='move'
+      event.dataTransfer.effectAllowed ='move'
+      event.dataTransfer.setData('inputField',event.target.id)
+    }
+    const onDrop=(event)=>{
+      const item =event.dataTransfer.getData('inputField')
+      event.target.appendChild(document.getElementById(item));
+    }
+   /*
+    const onDragging = (ev) => {
+        console.log(ev);
+        ev.dataTransfer.setData("text", ev.target.id);
+    };
+    const allowDrop = (ev) => {
+        ev.preventDefault();
+    };
+    const drag = (ev) => {
+        ev.dataTransfer.setData("text", ev.target.id);
+    };
+    const drop = (ev) => {
+        ev.preventDefault();
+        let data = ev.dataTransfer.getData("text");
+        console.log(data);
+        ev.target.appendChild(document.getElementById(data));
+    }
+*/
     //FOR NAME
     const name =useField('name',function(value){
        if(!value) return 'This field is required'
@@ -91,7 +130,7 @@ export default {
       if(!value) return 'This field is required'
 
       const emailRegex = RegExp(
-        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+        /^[a-zA-Z0-9.]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
       if(!emailRegex.test(String(value).toLowerCase())){
         return 'Please Enter a valid email address'
       }
@@ -130,6 +169,7 @@ export default {
       alert('Submitted')
     }
         return {
+          //startDrag,
           formSubmit,
           name:name.value,
           email:email.value,
@@ -141,9 +181,11 @@ export default {
           bioError:bio.errorMessage,
           photo:photo.value,
           photoError:photo.errorMessage,
-          
+          startDrag,
+          onDrop
         }
   },
 
   }
 </script>
+
