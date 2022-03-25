@@ -5,16 +5,20 @@
     <div class="max-w-5xl mx-auto px-6 sm:px-6 lg:px-8 mb-12">
         <div class="bg-gray-900 w-full shadow rounded p-8 sm:p-12 -mt-72">
             <p class="text-3xl font-bold leading-7 text-center text-white">User Info</p>
+            <div 
+                  @drop="drop"
+                  @dragover="allowDrop"
+                  
+                  >
             <form @submit.prevent="formSubmit" method="post">
                 <div class="md:flex items-center mt-12">
-                  <div
-                  @drop="onDrop"
+                 <!-- 
                   @dragenter.prevent
                   @dragover.prevent
-                  >
+                  @dragstart="startDrag"
                   
-                  </div>
-                    <div class="w-full md:w-1/2 flex flex-col" @dragstart="startDrag" id="123"
+                  -->
+                    <div class="w-full md:w-1/2 flex flex-col"  @dragstart="onDragging" id="123"
                     draggable="true">
                       <BaseInput 
                       v-model="name"
@@ -23,7 +27,7 @@
                         :error="nameError"
                         />
                     </div>
-                    <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4" @dragstart="startDrag" id="123"
+                    <div class="w-full md:w-1/2 flex flex-col md:ml-6 md:mt-0 mt-4"  @dragstart="onDragging" id="124"
                     draggable="true">
                       <BaseInput 
                       v-model="email"
@@ -32,24 +36,24 @@
                         :error="emailError"/>
                     </div>
                 </div>
-                <div draggable="true">
+                <div draggable="true" @dragstart="onDragging" id="125">
                   <BaseDateOfBirth 
                     v-model="dateOfBirth"
                     label="Date Of Birth"
                     type="text"
                     :error="dateOfBirthError"
                     />
+                    
                 </div>
-                    <div draggable="true">
+                    <div draggable="true" @dragstart="onDragging" id="126">
                       <BaseTextArea 
                       v-model="bio"
                       label="Bio"
                       type="text"
                       :error="bioError"
-                      :maxChar="maxChar"
                       />
                     </div>
-                    <div draggable="true">
+                    <div draggable="true" @dragstart="onDragging" id="127">
                       <BasePhoto
                       v-model="photo"
                       label="Photo"
@@ -57,11 +61,12 @@
                       :error="photoError"
                       />
                     </div>
-                    <div draggable="true">
+                    <div draggable="true" @dragstart="onDragging" id="128">
                       <SubmitButton />
                     </div>
-                    
+                   
             </form>
+             </div>
         </div>
     </div>
 </div>
@@ -88,7 +93,7 @@ export default {
   },
 
   setup(){
-    
+     /*
     const startDrag =(event)=>{
       event.dataTransfer.dropEffect ='move'
       event.dataTransfer.effectAllowed ='move'
@@ -98,7 +103,7 @@ export default {
       const item =event.dataTransfer.getData('inputField')
       event.target.appendChild(document.getElementById(item));
     }
-   /*
+  */
     const onDragging = (ev) => {
         console.log(ev);
         ev.dataTransfer.setData("text", ev.target.id);
@@ -115,7 +120,7 @@ export default {
         console.log(data);
         ev.target.appendChild(document.getElementById(data));
     }
-*/
+
     //FOR NAME
     const name =useField('name',function(value){
        if(!value) return 'This field is required'
@@ -181,11 +186,24 @@ export default {
           bioError:bio.errorMessage,
           photo:photo.value,
           photoError:photo.errorMessage,
-          startDrag,
-          onDrop
+          //startDrag,
+          //onDrop
+          onDragging,
+          allowDrop,
+          drag,
+          drop
         }
   },
 
   }
 </script>
 
+<style scoped>
+ #box-droppable2 {
+    width: 50%;
+    min-height: 300px;
+    height: 70px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+  }
+</style>
