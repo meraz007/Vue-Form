@@ -17,11 +17,6 @@
                 <p class="text-red-900">{{error}}</p>
             </div>
         </div>
-        <div class="relative">
-            <div class="absolute top-1 left-0">
-                <p v-if="!limitCount" class="text-red-900">{{error}}</p>
-            </div>
-        </div>
     </div>
 </template>
 

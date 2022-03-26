@@ -6,18 +6,11 @@
         <div class="bg-gray-900 w-full shadow rounded p-8 sm:p-12 -mt-72">
             <p class="text-3xl font-bold leading-7 text-center text-white">User Info</p>
             <div 
-                  @drop="drop"
-                  @dragover="allowDrop"
-                  
-                  >
+              @drop="drop"
+              @dragover="allowDrop"
+            >
             <form @submit.prevent="formSubmit" method="post">
                 <div class="md:flex items-center mt-12">
-                 <!-- 
-                  @dragenter.prevent
-                  @dragover.prevent
-                  @dragstart="startDrag"
-                  
-                  -->
                     <div class="w-full md:w-1/2 flex flex-col"  @dragstart="onDragging" id="123"
                     draggable="true">
                       <BaseInput 
@@ -93,30 +86,21 @@ export default {
   },
 
   setup(){
-     /*
-    const startDrag =(event)=>{
-      event.dataTransfer.dropEffect ='move'
-      event.dataTransfer.effectAllowed ='move'
-      event.dataTransfer.setData('inputField',event.target.id)
-    }
-    const onDrop=(event)=>{
-      const item =event.dataTransfer.getData('inputField')
-      event.target.appendChild(document.getElementById(item));
-    }
-  */
+    
+ //drag and drop
     const onDragging = (ev) => {
         console.log(ev);
-        ev.dataTransfer.setData("text", ev.target.id);
+        ev.dataTransfer.setData("inputField", ev.target.id);
     };
     const allowDrop = (ev) => {
         ev.preventDefault();
     };
     const drag = (ev) => {
-        ev.dataTransfer.setData("text", ev.target.id);
+        ev.dataTransfer.setData("inputField", ev.target.id);
     };
     const drop = (ev) => {
         ev.preventDefault();
-        let data = ev.dataTransfer.getData("text");
+        let data = ev.dataTransfer.getData("inputField");
         console.log(data);
         ev.target.appendChild(document.getElementById(data));
     }
@@ -186,8 +170,6 @@ export default {
           bioError:bio.errorMessage,
           photo:photo.value,
           photoError:photo.errorMessage,
-          //startDrag,
-          //onDrop
           onDragging,
           allowDrop,
           drag,
@@ -197,13 +179,3 @@ export default {
 
   }
 </script>
-
-<style scoped>
- #box-droppable2 {
-    width: 50%;
-    min-height: 300px;
-    height: 70px;
-    padding: 10px;
-    border: 1px solid #aaaaaa;
-  }
-</style>
